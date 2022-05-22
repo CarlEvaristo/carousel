@@ -1,21 +1,59 @@
-const slides = document.getElementsByClassName("carousel-item")
 const dotBtnContainer = document.getElementById("dot-btns")
 const dotBtns = document.getElementsByClassName("dot-btn")
 const overlay = document.getElementById("overlay")
+const carousel = document.querySelector(".carousel")
+
+let movies = [
+    {
+        image:"images/1.jpg",
+        title:"movie title 1"
+    },
+    {
+        image:"images/2.jpg",
+        title:"movie title 2"
+    },
+    {
+        image:"images/3.jpg",
+        title:"movie title 3"
+    }
+]
+
+for (let i=0; i<movies.length; i++) {
+    let movieDiv = document.createElement("div")
+    if (i == 0) {
+        movieDiv.setAttribute("class", "carousel-item carousel-item-visible")
+    } else {
+        movieDiv.setAttribute("class", "carousel-item")
+    }
+    let movieImg = document.createElement("img")
+    movieImg.setAttribute("class", "carousel-img")
+    movieImg.setAttribute("alt", movies[i].title)
+    movieImg.setAttribute("src", movies[i].image)
+    let movieTitle = document.createElement("h2")
+    movieTitle.textContent = `${movies[i].title}`
+    movieDiv.append(movieImg)
+    movieDiv.append(movieTitle)
+    carousel.append(movieDiv)
+}
+
+const slides = document.getElementsByClassName("carousel-item")
 const totalSlides = slides.length
 let slidePosition = 0
 
 document.getElementById("carousel-button-next").addEventListener("click", moveToNextSlide)
 document.getElementById("carousel-button-prev").addEventListener("click", moveToPrevSlide)
 
+// show modal on open click
 document.getElementById("open-carousel").addEventListener("click", function(){
+    slidePosition = 0
     overlay.style.display = "block"
 })
-
+// remove modal on exit click
 document.getElementById("exit-btn").addEventListener("click", function(){
-    overlay.style.display = "none"
+    slidePosition = 0
+    location.reload()
 })
-
+// create all dot buttons on start
 for (let i = 0 ; i < slides.length; i++) {
     let button = document.createElement("button")
     button.setAttribute("class", "dot-btn") 
@@ -25,9 +63,10 @@ for (let i = 0 ; i < slides.length; i++) {
     button.innerHTML = `<i class="fa-solid fa-circle"></i>`
     dotBtnContainer.append(button)
 }
-
+// make current dot button white on start
 dotBtns[0].style.color = "white"
 
+// dot button click handler
 function clickHandler(id) {
     hideAllSlides()
     slidePosition = parseInt(id)
